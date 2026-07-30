@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="cs">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nákup 2.0</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Ikony -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<header class="hlavicka">
+    <div>
+        <h1>💚 Nákup 2.0</h1>
+        <p>Evidence nákupů</p>
+    </div>
+
+    <button id="darkModeBtn">
+        🌙
+    </button>
+</header>
+
+
+<main class="aplikace">
+
+
+<!-- DASHBOARD -->
+
+<section class="dashboard">
+
+    <div class="karta">
+        <h3>💰 Celkem</h3>
+        <strong id="celkem">0 Kč</strong>
+    </div>
+
+
+    <div class="karta">
+        <h3>📅 Tento měsíc</h3>
+        <strong id="mesic">0 Kč</strong>
+    </div>
+
+
+    <div class="karta">
+        <h3>🛒 Počet nákupů</h3>
+        <strong id="pocet">0</strong>
+    </div>
+
+
+    <div class="karta">
+        <h3>📈 Nejvyšší nákup</h3>
+        <strong id="maximum">0 Kč</strong>
+    </div>
+
+</section>
+
+
+
+<!-- NOVÝ NÁKUP -->
+
+<section class="panel">
+
+<h2>➕ Nový nákup</h2>
+
+
+<label>Osoba</label>
+
+<select id="osoba">
+
+    <option value="A">A</option>
+    <option value="S">S</option>
+    <option value="K">K</option>
+    <option value="N">N</option>
+    <option value="D">D</option>
+
+</select>
+
+
+
+<label>Částka (Kč)</label>
+
+<input 
+type="number"
+id="castka"
+placeholder="např. 1250">
+
+
+
+<label>Datum</label>
+
+<input 
+type="date"
+id="datum">
+
+
+
+<label>Poznámka</label>
+
+<textarea
+id="poznamka"
+placeholder="např. Lidl, domácnost..."></textarea>
+
+
+<button id="ulozit">
+
+💾 Uložit nákup
+
+</button>
+
+
+</section>
+
+
+
+
+
+<!-- STATISTIKA OSOB -->
+
+<section class="panel">
+
+<h2>👤 Součty osob</h2>
+
+
+<div class="osoby">
+
+<div class="osoba A">
+A
+<br>
+<span id="sumaA">0 Kč</span>
+</div>
+
+
+<div class="osoba S">
+S
+<br>
+<span id="sumaS">0 Kč</span>
+</div>
+
+
+<div class="osoba K">
+K
+<br>
+<span id="sumaK">0 Kč</span>
+</div>
+
+
+<div class="osoba N">
+N
+<br>
+<span id="sumaN">0 Kč</span>
+</div>
+
+
+<div class="osoba D">
+D
+<br>
+<span id="sumaD">0 Kč</span>
+</div>
+
+</div>
+
+</section>
+
+
+
+
+
+
+<!-- TABULKA -->
+
+<section class="panel">
+
+<h2>📋 Přehled nákupů</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Datum</th>
+<th>Osoba</th>
+<th>Částka</th>
+<th>Poznámka</th>
+<th>Akce</th>
+
+</tr>
+
+</thead>
+
+
+<tbody id="tabulka">
+
+</tbody>
+
+
+</table>
+
+
+</section>
+
+
+
+</main>
+
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
