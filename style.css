@@ -516,3 +516,62 @@ body.dark tr:hover {
     gap: 10px;
 
 }
+/* ---------------------------------
+   Správa osob - vodorovný seznam
+---------------------------------- */
+
+#seznamOsob {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    max-height: 90px;
+
+    overflow-y: auto;
+
+    margin-top: 15px;
+
+}
+
+
+
+/* jednotlivá osoba */
+
+#seznamOsob div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    background: #f2f2f2;
+
+    padding: 5px 8px;
+
+    border-radius: 10px;
+
+}
+
+
+
+/* tlačítko smazání */
+
+#seznamOsob button {
+
+    background: #2e7d32;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 5px 8px;
+
+    cursor: pointer;
+
+}
