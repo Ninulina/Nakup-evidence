@@ -1,12 +1,14 @@
 // ------------------------------------
 // Nákup 2.0
-// app.js - základní funkce
+// app.js - kompletní verze
 // ------------------------------------
 
 
 let nakupy = JSON.parse(
     localStorage.getItem("nakupy")
 ) || [];
+
+
 
 // ------------------------------------
 // OSOBY
@@ -15,6 +17,7 @@ let nakupy = JSON.parse(
 let osoby = JSON.parse(
     localStorage.getItem("osoby")
 );
+
 
 if (!Array.isArray(osoby) || osoby.length === 0) {
 
@@ -26,10 +29,7 @@ if (!Array.isArray(osoby) || osoby.length === 0) {
         "D"
     ];
 
-    localStorage.setItem(
-        "osoby",
-        JSON.stringify(osoby)
-    );
+    ulozitOsoby();
 
 }
 
@@ -46,18 +46,23 @@ function ulozitOsoby(){
 
 
 
+// ZOBRAZENÍ OSOB
+
 function zobrazOsoby(){
+
 
     const select =
     document.getElementById("osoba");
 
+
     select.innerHTML = "";
+
 
 
     osoby.forEach(function(osoba){
 
 
-        const option =
+        let option =
         document.createElement("option");
 
 
@@ -70,97 +75,74 @@ function zobrazOsoby(){
 
 
     });
+
 
 
     const seznam =
     document.getElementById("seznamOsob");
 
 
+
     if(seznam){
+
 
         seznam.innerHTML = "";
 
 
         osoby.forEach(function(osoba){
 
-            const radek =
+
+            let radek =
             document.createElement("div");
 
 
-            radek.innerHTML =
-            osoba +
-            ' <button onclick="smazatOsobu(\'' 
-            + osoba +
-            '\')">🗑️</button>';
+            radek.innerHTML = `
+
+            ${osoba}
+
+            <button onclick="smazatOsobu('${osoba}')">
+            🗑️
+            </button>
+
+            `;
 
 
             seznam.appendChild(radek);
 
+
         });
+
 
     }
 
-}
-
-    const select =
-    document.getElementById("osoba");
 
 
-    select.innerHTML = "";
+    aktualizovatStatistiky();
 
-
-    osoby.forEach(function(osoba){
-
-
-        const option =
-        document.createElement("option");
-
-
-        option.value = osoba;
-
-        option.textContent = osoba;
-
-
-        select.appendChild(option);
-
-
-    });
 
 }
 
-// nastavení dnešního data
-
-document.getElementById("datum").value =
-    new Date().toISOString().split("T")[0];
 
 
 
-// ULOŽENÍ NÁKUPU
+// PŘIDÁNÍ OSOBY
 
-document.getElementById("ulozit")
-.addEventListener("click", function () {
-
-
-    const osoba =
-        document.getElementById("osoba").value;
-
-
-    const castka =
-        Number(document.getElementById("castka").value);
-
-
-    const datum =
-        document.getElementById("datum").value;
-
-
-    const poznamka =
-        document.getElementById("poznamka").value;
+document
+.getElementById("pridatOsobu")
+.addEventListener("click", function(){
 
 
 
-    if (!castka || castka <= 0) {
+    let nova =
+    document.getElementById("novaOsoba")
+    .value
+    .trim();
 
-        alert("Zadej prosím částku.");
+
+
+    if(nova === ""){
+
+        alert("Zadej jméno osoby.");
 
         return;
 
@@ -168,19 +150,120 @@ document.getElementById("ulozit")
 
 
 
-    const nakup = {
+    if(osoby.includes(nova)){
+
+        alert("Tato osoba už existuje.");
+
+        return;
+
+    }
+
+
+
+    osoby.push(nova);
+
+
+    ulozitOsoby();
+
+
+    zobrazOsoby();
+
+
+
+    document.getElementById("novaOsoba")
+    .value = "";
+
+
+});
+
+
+
+
+
+// SMAZÁNÍ OSOBY
+
+function smazatOsobu(osoba){
+
+
+    if(confirm("Smazat osobu " + osoba + "?")){
+
+
+        osoby =
+        osoby.filter(function(o){
+
+            return o !== osoba;
+
+        });
+
+
+
+        ulozitOsoby();
+
+
+        zobrazOsoby();
+
+
+    }
+
+
+}
+
+
+
+
+
+
+// DATUM
+
+document.getElementById("datum").value =
+new Date().toISOString().split("T")[0];
+
+
+
+
+
+
+// ULOŽENÍ NÁKUPU
+
+document
+.getElementById("ulozit")
+.addEventListener("click", function(){
+
+
+
+    let nakup = {
+
 
         id: Date.now(),
 
-        osoba: osoba,
 
-        castka: castka,
+        osoba:
+        document.getElementById("osoba").value,
 
-        datum: datum,
 
-        poznamka: poznamka
+        castka:
+        Number(document.getElementById("castka").value),
+
+
+        datum:
+        document.getElementById("datum").value,
+
+
+        poznamka:
+        document.getElementById("poznamka").value
+
 
     };
+
+
+
+    if(!nakup.castka || nakup.castka <=0){
+
+        alert("Zadej částku.");
+
+        return;
+
+    }
 
 
 
@@ -196,13 +279,11 @@ document.getElementById("ulozit")
     vycistitFormular();
 
 
-
 });
 
 
 
 
-// ULOŽENÍ DO PROHLÍŽEČE
 
 function ulozitData(){
 
@@ -216,13 +297,15 @@ function ulozitData(){
 
 
 
-// VYČIŠTĚNÍ FORMULÁŘE
 
 function vycistitFormular(){
 
-    document.getElementById("castka").value = "";
 
-    document.getElementById("poznamka").value = "";
+    document.getElementById("castka").value="";
+
+
+    document.getElementById("poznamka").value="";
+
 
 }
 
@@ -230,53 +313,42 @@ function vycistitFormular(){
 
 
 
-// ZOBRAZENÍ TABULKY
+
+// TABULKA
 
 function zobrazNakupy(){
 
 
     const tabulka =
-        document.getElementById("tabulka");
+    document.getElementById("tabulka");
 
 
-    tabulka.innerHTML = "";
+    tabulka.innerHTML="";
 
 
 
     nakupy.forEach(function(nakup){
 
 
-
-        const radek =
+        let radek =
         document.createElement("tr");
 
 
 
         radek.innerHTML = `
 
-        <td>${nakup.datum || ""}</td>
+        <td>${nakup.datum}</td>
 
-        <td class="${nakup.osoba}">
-        ${nakup.osoba || ""}
-        </td>
+        <td>${nakup.osoba}</td>
 
+        <td>${formatKc(nakup.castka)}</td>
 
-        <td>
-        ${formatKc(nakup.castka)}
-        </td>
-
+        <td>${nakup.poznamka || ""}</td>
 
         <td>
-        ${nakup.poznamka || ""}
-        </td>
-
-
-        <td>
-
         <button onclick="smazat(${nakup.id})">
         🗑️
         </button>
-
         </td>
 
         `;
@@ -299,29 +371,22 @@ function zobrazNakupy(){
 
 
 
-
-// SMAZÁNÍ
-
 function smazat(id){
 
 
-    if(confirm("Opravdu chceš smazat tento nákup?")){
+    nakupy =
+    nakupy.filter(function(n){
+
+        return n.id !== id;
+
+    });
 
 
-        nakupy =
-        nakupy.filter(
-            function(n){
-                return n.id !== id;
-            }
-        );
+    ulozitData();
 
 
-        ulozitData();
+    zobrazNakupy();
 
-        zobrazNakupy();
-
-
-    }
 
 }
 
@@ -329,7 +394,9 @@ function smazat(id){
 
 
 
-// STATISTIKY
+
+
+// STATISTIKA
 
 function aktualizovatStatistiky(){
 
@@ -337,32 +404,32 @@ function aktualizovatStatistiky(){
     let celkem = 0;
 
 
-    let souctyOsob = {
-    A:0,
-    S:0,
-    K:0,
-    N:0,
-    D:0
-};
+    let soucty = {};
+
+
+
+    osoby.forEach(function(osoba){
+
+        soucty[osoba]=0;
+
+    });
 
 
 
     nakupy.forEach(function(nakup){
 
 
-
         let castka =
-        Number(nakup.castka) || 0;
-
+        Number(nakup.castka)||0;
 
 
         celkem += castka;
 
 
 
-        if(osoby[nakup.osoba] !== undefined){
+        if(soucty[nakup.osoba] !== undefined){
 
-            osoby[nakup.osoba] += castka;
+            soucty[nakup.osoba]+=castka;
 
         }
 
@@ -384,18 +451,15 @@ function aktualizovatStatistiky(){
 
 
 
+
     let maximum = 0;
 
 
     nakupy.forEach(function(n){
 
-        let c =
-        Number(n.castka) || 0;
+        if(Number(n.castka)>maximum){
 
-
-        if(c > maximum){
-
-            maximum = c;
+            maximum=Number(n.castka);
 
         }
 
@@ -410,56 +474,66 @@ function aktualizovatStatistiky(){
 
 
 
-    document.getElementById("sumaA")
-    .textContent =
-    formatKc(osoby.A);
-
-
-    document.getElementById("sumaS")
-    .textContent =
-    formatKc(osoby.S);
-
-
-    document.getElementById("sumaK")
-    .textContent =
-    formatKc(osoby.K);
-
-
-    document.getElementById("sumaN")
-    .textContent =
-    formatKc(osoby.N);
-
-
-    document.getElementById("sumaD")
-    .textContent =
-    formatKc(osoby.D);
+    const box =
+    document.getElementById("souctyOsob");
 
 
 
-    // tento měsíc
+    if(box){
 
-    const dnes =
+
+        box.innerHTML="";
+
+
+        osoby.forEach(function(osoba){
+
+
+            box.innerHTML += `
+
+            <div class="osoba ${osoba}">
+
+            ${osoba}
+
+            <br>
+
+            <span>
+            ${formatKc(soucty[osoba])}
+            </span>
+
+            </div>
+
+            `;
+
+
+        });
+
+
+    }
+
+
+
+
+    let dnes =
     new Date();
 
 
+
     let mesic =
-    nakupy
-    .filter(function(n){
+    nakupy.filter(function(n){
 
         let d =
         new Date(n.datum);
 
 
-        return (
-            d.getMonth() === dnes.getMonth()
-            &&
-            d.getFullYear() === dnes.getFullYear()
-        );
+        return d.getMonth()===dnes.getMonth()
+        &&
+        d.getFullYear()===dnes.getFullYear();
+
 
     })
-    .reduce(function(suma,n){
+    .reduce(function(s,n){
 
-        return suma + (Number(n.castka)||0);
+        return s + Number(n.castka||0);
 
     },0);
 
@@ -470,91 +544,64 @@ function aktualizovatStatistiky(){
     formatKc(mesic);
 
 
+
 }
 
 
 
 
 
-// FORMÁT KČ
+
 
 function formatKc(cislo){
 
-
-    cislo =
-    Number(cislo) || 0;
-
-
-    return cislo.toLocaleString("cs-CZ")
+    return Number(cislo || 0)
+    .toLocaleString("cs-CZ")
     + " Kč";
-
 
 }
 
 
 
 
-// START APLIKACE
+
+
+
+// START
 
 zobrazNakupy();
+
 zobrazOsoby();
-document.getElementById("pridatOsobu")
-.addEventListener("click", function(){
-
-
-    const nova =
-    document.getElementById("novaOsoba")
-    .value
-    .trim();
 
 
 
-    if(nova === ""){
-
-        alert("Zadej jméno osoby.");
-
-        return;
-
-    }
 
 
-
-    osoby.push(nova);
-
-
-    ulozitOsoby();
-
-
-    zobrazOsoby();
-
-
-    document.getElementById("novaOsoba")
-    .value = "";
-
-
-});
 // ------------------------------------
 // TMAVÝ REŽIM
 // ------------------------------------
 
-const darkModeBtn = document.getElementById("darkModeBtn");
+const darkModeBtn =
+document.getElementById("darkModeBtn");
 
 
-darkModeBtn.addEventListener("click", function(){
+
+darkModeBtn.addEventListener("click",function(){
 
     document.body.classList.toggle("dark");
+
 
     localStorage.setItem(
         "darkMode",
         document.body.classList.contains("dark")
     );
 
+
 });
 
 
-// načtení režimu po otevření stránky
 
-if(localStorage.getItem("darkMode") === "true"){
+if(localStorage.getItem("darkMode")==="true"){
 
     document.body.classList.add("dark");
 
