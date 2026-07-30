@@ -51,6 +51,60 @@ function zobrazOsoby(){
     const select =
     document.getElementById("osoba");
 
+    select.innerHTML = "";
+
+
+    osoby.forEach(function(osoba){
+
+
+        const option =
+        document.createElement("option");
+
+
+        option.value = osoba;
+
+        option.textContent = osoba;
+
+
+        select.appendChild(option);
+
+
+    });
+
+
+    const seznam =
+    document.getElementById("seznamOsob");
+
+
+    if(seznam){
+
+        seznam.innerHTML = "";
+
+
+        osoby.forEach(function(osoba){
+
+            const radek =
+            document.createElement("div");
+
+
+            radek.innerHTML =
+            osoba +
+            ' <button onclick="smazatOsobu(\'' 
+            + osoba +
+            '\')">🗑️</button>';
+
+
+            seznam.appendChild(radek);
+
+        });
+
+    }
+
+}
+
+    const select =
+    document.getElementById("osoba");
+
 
     select.innerHTML = "";
 
