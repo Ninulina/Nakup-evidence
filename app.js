@@ -434,6 +434,7 @@ function formatKc(cislo){
 // START APLIKACE
 
 zobrazNakupy();
+zobrazOsoby();
 // ------------------------------------
 // TMAVÝ REŽIM
 // ------------------------------------
