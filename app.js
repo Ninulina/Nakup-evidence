@@ -606,3 +606,20 @@ if(localStorage.getItem("darkMode")==="true"){
     document.body.classList.add("dark");
 
 }
+/* ---------------------------------
+   Skrolování seznamu osob
+---------------------------------- */
+
+#seznamOsob {
+
+    max-height: 180px;
+
+    overflow-y: auto;
+
+    margin-top: 10px;
+
+    padding: 8px;
+
+    border-radius: 10px;
+
+}
