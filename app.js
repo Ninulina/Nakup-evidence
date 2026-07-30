@@ -380,3 +380,29 @@ function formatKc(cislo){
 // START APLIKACE
 
 zobrazNakupy();
+// ------------------------------------
+// TMAVÝ REŽIM
+// ------------------------------------
+
+const darkModeBtn = document.getElementById("darkModeBtn");
+
+
+darkModeBtn.addEventListener("click", function(){
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "darkMode",
+        document.body.classList.contains("dark")
+    );
+
+});
+
+
+// načtení režimu po otevření stránky
+
+if(localStorage.getItem("darkMode") === "true"){
+
+    document.body.classList.add("dark");
+
+}
