@@ -14,13 +14,24 @@ let nakupy = JSON.parse(
 
 let osoby = JSON.parse(
     localStorage.getItem("osoby")
-) || [
-    "A",
-    "S",
-    "K",
-    "N",
-    "D"
-];
+);
+
+if (!Array.isArray(osoby) || osoby.length === 0) {
+
+    osoby = [
+        "A",
+        "S",
+        "K",
+        "N",
+        "D"
+    ];
+
+    localStorage.setItem(
+        "osoby",
+        JSON.stringify(osoby)
+    );
+
+}
 
 
 
