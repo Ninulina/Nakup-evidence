@@ -474,3 +474,45 @@ body.dark tr:hover {
     background:#333;
 
 }
+/* ---------------------------------
+   Dynamické osoby
+---------------------------------- */
+
+.osoba {
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    margin: 5px;
+}
+
+
+/* výchozí barva pro nové osoby */
+
+.osoba span {
+    font-weight: normal;
+}
+
+
+
+/* tmavý režim */
+
+.dark .osoba {
+
+    background: #333;
+
+    color: white;
+
+}
+
+
+
+/* karty součtů */
+
+#souctyOsob {
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+}
