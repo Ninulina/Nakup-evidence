@@ -435,6 +435,41 @@ function formatKc(cislo){
 
 zobrazNakupy();
 zobrazOsoby();
+document.getElementById("pridatOsobu")
+.addEventListener("click", function(){
+
+
+    const nova =
+    document.getElementById("novaOsoba")
+    .value
+    .trim();
+
+
+
+    if(nova === ""){
+
+        alert("Zadej jméno osoby.");
+
+        return;
+
+    }
+
+
+
+    osoby.push(nova);
+
+
+    ulozitOsoby();
+
+
+    zobrazOsoby();
+
+
+    document.getElementById("novaOsoba")
+    .value = "";
+
+
+});
 // ------------------------------------
 // TMAVÝ REŽIM
 // ------------------------------------
