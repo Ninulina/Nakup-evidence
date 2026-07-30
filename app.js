@@ -283,15 +283,13 @@ function aktualizovatStatistiky(){
     let celkem = 0;
 
 
-    let osoby = {
-
-        A:0,
-        S:0,
-        K:0,
-        N:0,
-        D:0
-
-    };
+    let souctyOsob = {
+    A:0,
+    S:0,
+    K:0,
+    N:0,
+    D:0
+};
 
 
 
