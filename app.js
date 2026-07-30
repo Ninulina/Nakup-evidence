@@ -8,6 +8,60 @@ let nakupy = JSON.parse(
     localStorage.getItem("nakupy")
 ) || [];
 
+// ------------------------------------
+// OSOBY
+// ------------------------------------
+
+let osoby = JSON.parse(
+    localStorage.getItem("osoby")
+) || [
+    "A",
+    "S",
+    "K",
+    "N",
+    "D"
+];
+
+
+
+function ulozitOsoby(){
+
+    localStorage.setItem(
+        "osoby",
+        JSON.stringify(osoby)
+    );
+
+}
+
+
+
+function zobrazOsoby(){
+
+    const select =
+    document.getElementById("osoba");
+
+
+    select.innerHTML = "";
+
+
+    osoby.forEach(function(osoba){
+
+
+        const option =
+        document.createElement("option");
+
+
+        option.value = osoba;
+
+        option.textContent = osoba;
+
+
+        select.appendChild(option);
+
+
+    });
+
+}
 
 // nastavení dnešního data
 
