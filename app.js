@@ -1,16 +1,12 @@
 // ------------------------------------
 // Nákup 2.0
-// Základní logika aplikace
+// app.js - základní funkce
 // ------------------------------------
 
-
-// načtení uložených nákupů
 
 let nakupy = JSON.parse(
     localStorage.getItem("nakupy")
 ) || [];
-
-
 
 
 // nastavení dnešního data
@@ -20,35 +16,32 @@ document.getElementById("datum").value =
 
 
 
-
-
-// tlačítko uložit
+// ULOŽENÍ NÁKUPU
 
 document.getElementById("ulozit")
-.addEventListener("click", function(){
+.addEventListener("click", function () {
+
+
+    const osoba =
+        document.getElementById("osoba").value;
+
+
+    const castka =
+        Number(document.getElementById("castka").value);
+
+
+    const datum =
+        document.getElementById("datum").value;
+
+
+    const poznamka =
+        document.getElementById("poznamka").value;
 
 
 
-    let osoba =
-    document.getElementById("osoba").value;
+    if (!castka || castka <= 0) {
 
-
-    let castka =
-    Number(document.getElementById("castka").value);
-
-
-    let datum =
-    document.getElementById("datum").value;
-
-
-    let poznamka =
-    document.getElementById("poznamka").value;
-
-
-
-    if(!castka){
-
-        alert("Zadej částku.");
+        alert("Zadej prosím částku.");
 
         return;
 
@@ -56,18 +49,17 @@ document.getElementById("ulozit")
 
 
 
-
-    let nakup = {
+    const nakup = {
 
         id: Date.now(),
 
-        osoba,
+        osoba: osoba,
 
-        castka,
+        castka: castka,
 
-        datum,
+        datum: datum,
 
-        poznamka
+        poznamka: poznamka
 
     };
 
@@ -76,13 +68,10 @@ document.getElementById("ulozit")
     nakupy.push(nakup);
 
 
-
     ulozitData();
 
 
-
     zobrazNakupy();
-
 
 
     vycistitFormular();
@@ -94,10 +83,7 @@ document.getElementById("ulozit")
 
 
 
-
-
-
-// uložení dat
+// ULOŽENÍ DO PROHLÍŽEČE
 
 function ulozitData(){
 
@@ -111,17 +97,13 @@ function ulozitData(){
 
 
 
-
-
-// vyčištění formuláře
+// VYČIŠTĚNÍ FORMULÁŘE
 
 function vycistitFormular(){
 
+    document.getElementById("castka").value = "";
 
-    document.getElementById("castka").value="";
-
-    document.getElementById("poznamka").value="";
-
+    document.getElementById("poznamka").value = "";
 
 }
 
@@ -129,74 +111,68 @@ function vycistitFormular(){
 
 
 
-
-
-// zobrazení tabulky
+// ZOBRAZENÍ TABULKY
 
 function zobrazNakupy(){
 
 
-
-let tabulka =
-document.getElementById("tabulka");
-
-
-tabulka.innerHTML="";
+    const tabulka =
+        document.getElementById("tabulka");
 
 
-
-nakupy
-.sort((a,b)=> new Date(b.datum)-new Date(a.datum))
-.forEach(function(nakup){
+    tabulka.innerHTML = "";
 
 
 
-let radek = document.createElement("tr");
+    nakupy.forEach(function(nakup){
 
 
 
-radek.innerHTML = `
-
-
-<td>${nakup.datum}</td>
-
-<td class="${nakup.osoba}">
-${nakup.osoba}
-</td>
-
-
-<td>
-${formatKc(nakup.castka)}
-</td>
-
-
-<td>
-${nakup.poznamka || ""}
-</td>
-
-
-<td>
-
-<button onclick="smazat(${nakup.id})">
-🗑️
-</button>
-
-</td>
-
-
-`;
+        const radek =
+        document.createElement("tr");
 
 
 
-tabulka.appendChild(radek);
+        radek.innerHTML = `
+
+        <td>${nakup.datum || ""}</td>
+
+        <td class="${nakup.osoba}">
+        ${nakup.osoba || ""}
+        </td>
+
+
+        <td>
+        ${formatKc(nakup.castka)}
+        </td>
+
+
+        <td>
+        ${nakup.poznamka || ""}
+        </td>
+
+
+        <td>
+
+        <button onclick="smazat(${nakup.id})">
+        🗑️
+        </button>
+
+        </td>
+
+        `;
 
 
 
-});
+        tabulka.appendChild(radek);
 
 
 
-aktualizovatStatistiky();
+    });
+
+
+
+    aktualizovatStatistiky();
 
 
 }
@@ -205,204 +181,195 @@ aktualizovatStatistiky();
 
 
 
-
-
-
-
-// mazání
+// SMAZÁNÍ
 
 function smazat(id){
 
 
-if(confirm("Opravdu chceš smazat tento nákup?")){
+    if(confirm("Opravdu chceš smazat tento nákup?")){
 
 
-nakupy =
-nakupy.filter(
-n => n.id !== id
-);
+        nakupy =
+        nakupy.filter(
+            function(n){
+                return n.id !== id;
+            }
+        );
 
 
-ulozitData();
+        ulozitData();
+
+        zobrazNakupy();
 
 
-zobrazNakupy();
-
+    }
 
 }
 
 
-}
 
 
 
-
-
-
-
-
-
-
-// statistiky
-
+// STATISTIKY
 
 function aktualizovatStatistiky(){
 
 
-
-let celkem = 0;
-
-let osoby = {
-
-A:0,
-S:0,
-K:0,
-N:0,
-D:0
-
-};
+    let celkem = 0;
 
 
+    let osoby = {
+
+        A:0,
+        S:0,
+        K:0,
+        N:0,
+        D:0
+
+    };
 
 
 
-nakupy.forEach(function(nakup){
+    nakupy.forEach(function(nakup){
 
 
 
-celkem += nakup.castka;
+        let castka =
+        Number(nakup.castka) || 0;
 
 
 
-if(osoby[nakup.osoba] !== undefined){
+        celkem += castka;
 
-    osoby[nakup.osoba]
-    += nakup.castka;
+
+
+        if(osoby[nakup.osoba] !== undefined){
+
+            osoby[nakup.osoba] += castka;
+
+        }
+
+
+    });
+
+
+
+
+    document.getElementById("celkem")
+    .textContent =
+    formatKc(celkem);
+
+
+
+    document.getElementById("pocet")
+    .textContent =
+    nakupy.length;
+
+
+
+    let maximum = 0;
+
+
+    nakupy.forEach(function(n){
+
+        let c =
+        Number(n.castka) || 0;
+
+
+        if(c > maximum){
+
+            maximum = c;
+
+        }
+
+    });
+
+
+
+    document.getElementById("maximum")
+    .textContent =
+    formatKc(maximum);
+
+
+
+
+    document.getElementById("sumaA")
+    .textContent =
+    formatKc(osoby.A);
+
+
+    document.getElementById("sumaS")
+    .textContent =
+    formatKc(osoby.S);
+
+
+    document.getElementById("sumaK")
+    .textContent =
+    formatKc(osoby.K);
+
+
+    document.getElementById("sumaN")
+    .textContent =
+    formatKc(osoby.N);
+
+
+    document.getElementById("sumaD")
+    .textContent =
+    formatKc(osoby.D);
+
+
+
+    // tento měsíc
+
+    const dnes =
+    new Date();
+
+
+    let mesic =
+    nakupy
+    .filter(function(n){
+
+        let d =
+        new Date(n.datum);
+
+
+        return (
+            d.getMonth() === dnes.getMonth()
+            &&
+            d.getFullYear() === dnes.getFullYear()
+        );
+
+    })
+    .reduce(function(suma,n){
+
+        return suma + (Number(n.castka)||0);
+
+    },0);
+
+
+
+    document.getElementById("mesic")
+    .textContent =
+    formatKc(mesic);
+
 
 }
 
 
 
-});
 
 
-
-
-
-document.getElementById("celkem")
-.textContent =
-formatKc(celkem);
-
-
-
-document.getElementById("pocet")
-.textContent =
-nakupy.length;
-
-
-
-let maximum =
-nakupy.length
-?
-Math.max(...nakupy.map(n=>n.castka))
-:
-0;
-
-
-
-document.getElementById("maximum")
-.textContent =
-formatKc(maximum);
-
-
-
-
-
-document.getElementById("sumaA")
-.textContent=formatKc(osoby.A);
-
-
-document.getElementById("sumaS")
-.textContent=formatKc(osoby.S);
-
-
-document.getElementById("sumaK")
-.textContent=formatKc(osoby.K);
-
-
-document.getElementById("sumaN")
-.textContent=formatKc(osoby.N);
-
-
-document.getElementById("sumaD")
-.textContent=formatKc(osoby.D);
-
-
-
-
-
-// tento měsíc
-
-
-let dnes =
-new Date();
-
-
-
-let mesic =
-nakupy
-.filter(n=>{
-
-let d =
-new Date(n.datum);
-
-return (
-d.getMonth()
-===
-dnes.getMonth()
-&&
-d.getFullYear()
-===
-dnes.getFullYear()
-);
-
-})
-.reduce(
-(sum,n)=>sum+n.castka,
-0
-);
-
-
-
-
-
-document.getElementById("mesic")
-.textContent =
-formatKc(mesic);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// formát částky
-
+// FORMÁT KČ
 
 function formatKc(cislo){
 
 
-return cislo.toLocaleString(
-"cs-CZ"
-)
-+
-" Kč";
+    cislo =
+    Number(cislo) || 0;
+
+
+    return cislo.toLocaleString("cs-CZ")
+    + " Kč";
 
 
 }
@@ -410,10 +377,6 @@ return cislo.toLocaleString(
 
 
 
-
-
-
-// první načtení
-
+// START APLIKACE
 
 zobrazNakupy();
